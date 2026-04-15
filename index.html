@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Krish 03 Ultimate Store</title>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+}
+
+/* NAVBAR */
+.navbar{
+display:flex;
+justify-content:space-between;
+padding:15px 30px;
+background:rgba(0,0,0,0.7);
+backdrop-filter:blur(10px);
+}
+
+/* LOGO */
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:20px;
+font-weight:bold;
+}
+.logo img{
+width:45px;
+filter:drop-shadow(0 0 10px #00e5ff);
+}
+
+/* LINKS */
+.navbar span{
+margin:0 10px;
+cursor:pointer;
+transition:0.3s;
+}
+.navbar span:hover{color:#00e5ff}
+
+/* PAGE */
+.page{display:none;padding:20px;}
+.active{display:block}
+
+/* HERO */
+.hero{
+text-align:center;
+margin-top:100px;
+}
+.hero h1{
+font-size:50px;
+background:linear-gradient(to right,#00e5ff,#00ffcc);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+/* FORM */
+.form{
+width:300px;
+margin:100px auto;
+background:rgba(0,0,0,0.6);
+padding:20px;
+border-radius:15px;
+}
+
+/* INPUT */
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:none;
+border-radius:10px;
+}
+
+/* BUTTON */
+button{
+padding:10px;
+border:none;
+border-radius:20px;
+margin:5px;
+cursor:pointer;
+background:#00e5ff;
+color:black;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+/* CARD */
+.card{
+background:rgba(255,255,255,0.1);
+padding:15px;
+border-radius:15px;
+text-align:center;
+transition:0.3s;
+}
+.card:hover{transform:translateY(-8px);}
+
+.card img{
+width:100%;
+height:160px;
+border-radius:10px;
+}
+
+/* BOX */
+.box{
+background:rgba(0,0,0,0.5);
+padding:15px;
+border-radius:15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+<div class="logo">
+<img src="https://cdn-icons-png.flaticon.com/512/2331/2331970.png">
+Krish 03 👟
+</div>
+
+<div>
+<span onclick="show('home')">Home</span>
+<span onclick="show('shop')">Shop</span>
+<span onclick="show('wishlist')">Wishlist</span>
+<span onclick="show('orders')">Orders</span>
+<span onclick="show('login')">Login</span>
+</div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+<div class="hero">
+<h1>Krish 03</h1>
+<p>Step into premium style 👟🔥</p>
+<p>Walk smart. Walk bold.</p>
+</div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+<div class="form">
+<h2>Login / Register</h2>
+<input id="email" placeholder="Email">
+<input id="pass" placeholder="Password">
+<button onclick="login()">Login</button>
+<button onclick="register()">Register</button>
+</div>
+</div>
+
+<!-- OTP -->
+<div id="otpPage" class="page">
+<div class="form">
+<h2>Enter OTP</h2>
+<input id="otpInput">
+<button onclick="verifyOTP()">Verify</button>
+</div>
+</div>
+
+<!-- SHOP -->
+<div id="shop" class="page">
+<div class="grid" id="products"></div>
+
+<div class="box">
+<h3>Cart</h3>
+<div id="cart"></div>
+<h4>Total ₹<span id="total">0</span></h4>
+<button onclick="pay()">Pay Now</button>
+</div>
+</div>
+
+<!-- WISHLIST -->
+<div id="wishlist" class="page">
+<h2>Wishlist ❤️</h2>
+<div id="wish"></div>
+</div>
+
+<!-- ORDERS -->
+<div id="orders" class="page">
+<h2>Order History 📦</h2>
+<div id="orderList"></div>
+</div>
+
+<script>
+
+/* PAGE SWITCH */
+function show(p){
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+document.getElementById(p).classList.add("active");
+}
+
+/* USER */
+let currentUser=false;
+let otp="";
+
+/* REGISTER */
+function register(){
+localStorage.setItem("user",JSON.stringify({
+email:email.value,
+pass:pass.value
+}));
+alert("Registered ✅");
+}
+
+/* LOGIN */
+function login(){
+let user=JSON.parse(localStorage.getItem("user"));
+
+if(!user){
+alert("Register first ❌");
+return;
+}
+
+if(user.email==email.value && user.pass==pass.value){
+otp=Math.floor(1000+Math.random()*9000);
+alert("OTP: "+otp);
+show("otpPage");
+}else{
+alert("Wrong login ❌");
+}
+}
+
+/* OTP */
+function verifyOTP(){
+if(otpInput.value==otp){
+currentUser=true;
+alert("Login Success 🎉");
+show("shop");
+}else{
+alert("Wrong OTP ❌");
+}
+}
+
+/* PRODUCTS */
+let products=[
+{name:"Nike Air",price:2500,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff"},
+{name:"Adidas",price:2200,img:"https://images.unsplash.com/photo-1528701800489-20be3c6f2b0d"},
+{name:"Puma",price:2000,img:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519"},
+{name:"Reebok",price:2100,img:"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a"}
+];
+
+let cart=[], wishlist=[], orders=[];
+
+/* LOAD PRODUCTS */
+function load(){
+let h="";
+products.forEach((p,i)=>{
+h+=`
+<div class="card">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p>₹${p.price}</p>
+<button onclick="addCart(${i})">Cart</button>
+<button onclick="addWish(${i})">❤️</button>
+</div>`;
+});
+document.getElementById("products").innerHTML=h;
+}
+load();
+
+/* CART */
+function addCart(i){
+cart.push(products[i]);
+updateCart();
+}
+
+function updateCart(){
+let t=0,h="";
+cart.forEach(p=>{
+t+=p.price;
+h+=p.name+" ₹"+p.price+"<br>";
+});
+document.getElementById("cart").innerHTML=h;
+document.getElementById("total").innerText=t;
+}
+
+/* WISHLIST */
+function addWish(i){
+wishlist.push(products[i]);
+let h="";
+wishlist.forEach(p=>{
+h+=`<div><img src="${p.img}" width="80"> ${p.name}</div>`;
+});
+document.getElementById("wish").innerHTML=h;
+}
+
+/* PAYMENT */
+function pay(){
+if(!currentUser){
+alert("Login required 🔐");
+show("login");
+return;
+}
+
+if(cart.length==0){
+alert("Cart empty 😅");
+return;
+}
+
+orders.push([...cart]);
+updateOrders();
+
+alert("Payment Success 🎉");
+cart=[];
+updateCart();
+}
+
+/* ORDERS */
+function updateOrders(){
+let h="";
+orders.forEach((o,i)=>{
+h+=`Order ${i+1}: ${o.map(x=>x.name).join(", ")}<br>`;
+});
+document.getElementById("orderList").innerHTML=h;
+}
+
+</script>
+
+</body>
+</html>
